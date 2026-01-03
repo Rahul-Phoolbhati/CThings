@@ -4,6 +4,7 @@
 #include <sys/ioctl.h>
 #include <string.h>
 #include <stdlib.h>
+#include "includes/file_save_utility.h"
 
 
 enum arrow_key {
@@ -13,7 +14,8 @@ enum arrow_key {
   ARROW_DOWN
 };
 enum command_mode{
-  EXIT = 9999
+  EXIT = 9999,
+  SAVETOFILE = 9998,
 };
 
 int cx = 0, cy = 0;
@@ -121,6 +123,7 @@ int readChar(){
     else if (seq[0] == ':'){
       switch (seq[1]) {
         case 'q': return EXIT; 
+        case 'w': return SAVETOFILE;
       }
     }
   }
@@ -184,6 +187,9 @@ int main() {
     refreshScreen();
     int c = readChar();
     if (c == EXIT) break;
+    if(c == SAVETOFILE) {
+        int err = saveToFile();
+    }
     switch (c)
     {
         case ARROW_LEFT:
