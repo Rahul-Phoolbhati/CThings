@@ -12,6 +12,9 @@ enum arrow_key {
   ARROW_UP,
   ARROW_DOWN
 };
+enum command_mode{
+  EXIT = 9999
+};
 
 int cx = 0, cy = 0;
 int screen_rows;
@@ -115,6 +118,11 @@ int readChar(){
         case 'D': return ARROW_LEFT; // Left to 'a'
       }
     }
+    else if (seq[0] == ':'){
+      switch (seq[1]) {
+        case 'q': return EXIT; 
+      }
+    }
   }
 
   return c;
@@ -175,7 +183,7 @@ int main() {
   while (1) {
     refreshScreen();
     int c = readChar();
-    if (c == 'q') break;
+    if (c == EXIT) break;
     switch (c)
     {
         case ARROW_LEFT:
@@ -196,7 +204,7 @@ int main() {
 
         default:
             if (c >= 32 && c <= 126) {
-              if (cx > line_lengths[cy])  line_lengths[cy]=cx;
+              // if (cx > line_lengths[cy])  line_lengths[cy]=cx;
               if(line_lengths[cy] < screen_cols - 1){
                 text_buffer[cy][line_lengths[cy]] = c;
                 line_lengths[cy]++;
