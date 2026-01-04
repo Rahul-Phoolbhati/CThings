@@ -134,13 +134,23 @@ int readChar(){
 void handle_arrow_key(int key){
   switch(key){
     case ARROW_UP:
-      if(cy>0) cy--;
+      if(cy>0) {
+        cy--;
+        if(cx > line_lengths[cy]){
+          cx = line_lengths[cy];
+        }
+      }
       return;
     case ARROW_RIGHT: 
       if(cx < (screen_cols-1)) cx++;
       return;
     case ARROW_DOWN:
-      if(cy < (screen_rows-1)) cy++;
+      if(cy < (screen_rows-1)) {
+        cy++;
+        if(cx>line_lengths[cy]){
+          cx = line_lengths[cy];
+        }
+      }
       return;
     case ARROW_LEFT:
       if(cx>0) cx--;
@@ -210,9 +220,12 @@ int main() {
 
         default:
             if (c >= 32 && c <= 126) {
-              // if (cx > line_lengths[cy])  line_lengths[cy]=cx;
+
               if(line_lengths[cy] < screen_cols - 1){
-                text_buffer[cy][line_lengths[cy]] = c;
+                for(int i= line_lengths[cy]; i>cx;i--){
+                  text_buffer[cy][i] = text_buffer[cy][i-1];
+                }
+                text_buffer[cy][cx] = c;
                 line_lengths[cy]++;
                 cx++;
               }
